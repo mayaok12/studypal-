@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
@@ -9,10 +9,17 @@ import Planner from './pages/Planner'
 import Stats from './pages/Stats'
 import Gems from './pages/Gems'
 import Friends from './pages/Friends'
+import SignInPage from './pages/SignInPage'
 import './index.css'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+function Root() {
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  if (!loggedIn) {
+    return <SignInPage onSignIn={() => setLoggedIn(true)} />
+  }
+
+  return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
@@ -26,5 +33,11 @@ createRoot(document.getElementById('root')).render(
         </Route>
       </Routes>
     </BrowserRouter>
+  )
+}
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <Root />
   </StrictMode>,
 )
