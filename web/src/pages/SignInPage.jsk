@@ -1,0 +1,83 @@
+import {useState} from 'react'
+
+export default function SignInPage({onSignIn}){
+    const [mode, setMode] = useState('signin')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+
+    function handleSubmit() {
+        if(!email.trim()|| !passsword){
+            setError('Enter an email and passwprd to continue... T-T ')
+            return
+        }
+        setError('')
+        onSignInn(email.trim())
+    }
+    function handleGoogle() {
+        onSignIn('you@gmail.com(demo)')
+    }
+  return (
+    <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6 font-body">
+      <div className="flex items-center gap-2 font-heading font-extrabold text-xl text-ink mb-6">
+        GemStudy
+      </div>
+
+      <div className="bg-card rounded-lg p-7 w-full max-w-sm shadow">
+        <h1 className="font-heading text-2xl text-ink">
+          {mode === 'signin' ? 'Welcome back!' : 'Create your account'}
+        </h1>
+        <p className="text-sm text-ink-soft mt-1 mb-4">
+          {mode === 'signin' ? 'Sign in to keep your streak going.' : 'Start tracking your study hours.'}
+        </p>
+
+        <button
+          onClick={handleGoogle}
+          className="w-full border border-line rounded-full py-3 font-heading font-bold text-sm text-ink mb-4"
+        >
+          Continue with Google
+        </button>
+
+        <div className="flex items-center gap-2 text-[11px] font-bold text-ink-faint mb-4">
+          <div className="flex-1 h-px bg-line" />OR<div className="flex-1 h-px bg-line" />
+        </div>
+
+        <label className="block text-xs font-bold mb-1.5 text-ink">Email</label>
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          className="w-full px-4 py-3 rounded-full border border-line text-sm mb-3.5 outline-none"
+        />
+
+        <label className="block text-xs font-bold mb-1.5 text-ink">Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+          className="w-full px-4 py-3 rounded-full border border-line text-sm mb-2 outline-none"
+        />
+
+        {error && <p className="text-xs font-semibold text-pink mb-3">{error}</p>}
+
+        <button
+          onClick={handleSubmit}
+          className="w-full bg-sage text-white rounded-full py-3 font-heading font-bold text-sm mt-2"
+        >
+          {mode === 'signin' ? 'Sign in' : 'Sign up'}
+        </button>
+
+        <p className="text-center text-sm text-ink-soft mt-4">
+          {mode === 'signin' ? 'No account yet? ' : 'Already have an account? '}
+          
+            onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError('') }}
+            className="font-bold text-sage-deep cursor-pointer"
+          >
+            {mode === 'signin' ? 'Sign up' : 'Sign in'}
+          </a>
+        </p>
+      </div>
+    </div>
+  )
+}
