@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { Play, Pause, RotateCcw, Check } from 'lucide-react'
 import { useTimer } from '../hooks/useTimer'
+import { useOutletContext } from 'react-router-dom'
 
 export default function Focus() {
   const [subject, setSubject] = useState('')
 
-  function handleSessionComplete(minutes, type) {
-    console.log(`Session complete: ${minutes} min (${type})`, subject)
-    // Actually saving this to real app state is the next Phase 2 step
-  }
+const { logSession } = useOutletContext()
 
+function handleSessionComplete(minutes, type) {
+  logSession(minutes, type, subject)
+}
   const timer = useTimer(handleSessionComplete)
   const isGreen = timer.mode === 'pomodoro' || (timer.mode === 'stopwatch' && timer.display !== '00:00')
 
