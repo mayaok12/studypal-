@@ -11,11 +11,11 @@ export function useTimer(onSessionComplete) {
   const intervalRef = useRef(null)
 
     useEffect(() => {
-    if (running) setRemaining(focusMins * 60)
+    if (!running) setRemaining(focusMins * 60)
   }, [focusMins, running])
 
   useEffect(() => {
-    if (running) return
+    if (!running) return
 
   intervalRef.current = setInterval(() => {
       if (mode === 'pomodoro') {
