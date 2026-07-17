@@ -14,6 +14,15 @@ import './index.css'
 
 function Root() {
   const [loggedIn, setLoggedIn] = useState(false)
+  const [sessions, setSessions] = useState([])
+
+  function logSession(minutes, type, subject) {
+    const today = new Date().toISOString().slice(0, 10)
+    setSessions((prev) => [...prev, { date: today, minutes, type, subject }])
+  }
+
+  const totalMinutes = sessions.reduce((sum, s) => sum + s.minutes, 0)
+  const gems = Math.floor(totalMinutes / 10)
 
   if (!loggedIn) {
     return <SignInPage onSignIn={() => setLoggedIn(true)} />
@@ -22,7 +31,7 @@ function Root() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout />}>
+        <Route element={<Layout sessions={sessions} gems={gems} logSession={logSession} />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/focus" element={<Focus />} />
           <Route path="/tasks" element={<Tasks />} />
