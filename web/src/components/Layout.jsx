@@ -17,7 +17,7 @@ export default function Layout() {
         <Outlet />
       </div>
 
-      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card rounded-full shadow-[var(--shadow-card)] px-2 py-2 flex gap-1">
+      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card rounded-full shadow-(--shadow-card) px-2 py-2 flex gap-1">
         {TABS.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
@@ -25,7 +25,7 @@ export default function Layout() {
             end={to === '/'}
             className={({ isActive }) =>
               `flex items-center gap-1.5 px-3.5 py-2.5 rounded-full transition-colors ${
-                isActive ? 'bg-sage text-white' : 'text-ink-soft'
+                isActive ? 'bg-sage-deep text-white' : 'text-ink-soft'
               }`
             }
           >
