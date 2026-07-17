@@ -10,9 +10,9 @@ export function useTimer(onSessionComplete) {
   const [elapsed, setElapsed] = useState(0)
   const intervalRef = useRef(null)
 
-    useEffect(() => {
-    if (!running) setRemaining(focusMins * 60)
-  }, [focusMins, running])
+useEffect(() => {
+  setRemaining(focusMins * 60)
+}, [focusMins])
 
   useEffect(() => {
     if (!running) return
