@@ -1,4 +1,4 @@
-import { StrictMode, useState } from 'react'
+import { StrictMode, useState, useRef, useCallback } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
@@ -10,16 +10,26 @@ import Stats from './pages/Stats'
 import Gems from './pages/Gems'
 import Friends from './pages/Friends'
 import SignInPage from './pages/SignInPage'
+import { useTimer } from './hooks/useTimer'
 import './index.css'
 
 function Root() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [sessions, setSessions] = useState([])
+  const [subject, setSubject] = useState('')
+  const subjectRef = useRef('')
 
-  function logSession(minutes, type, subject) {
-    const today = new Date().toISOString().slice(0, 10)
-    setSessions((prev) => [...prev, { date: today, minutes, type, subject }])
+  function updateSubject(value) {
+    setSubject(value)
+    subjectRef.current = value
   }
+
+  const logSession = useCallback((minutes, type) => {
+    const today = new Date().toISOString().slice(0, 10)
+    setSessions((prev) => [...prev, { date: today, minutes, type, subject: subjectRef.current }])
+  }, [])
+
+  const timer = useTimer(logSession)
 
   const totalMinutes = sessions.reduce((sum, s) => sum + s.minutes, 0)
   const gems = Math.floor(totalMinutes / 10)
@@ -31,7 +41,7 @@ function Root() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout sessions={sessions} gems={gems} logSession={logSession} />}>
+        <Route element={<Layout sessions={sessions} gems={gems} timer={timer} subject={subject} updateSubject={updateSubject} />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/focus" element={<Focus />} />
           <Route path="/tasks" element={<Tasks />} />
