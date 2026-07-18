@@ -14,7 +14,7 @@ export default function Layout({ sessions, gems, logSession }) {
   return (
     <div className="min-h-screen bg-bg text-ink font-body pb-28">
       <div className="max-w-xl mx-auto px-5 pt-8">
-        <Outlet context={[sessions, gems, logSession]} />
+        <Outlet context={{sessions, gems, logSession}} />
       </div>
 
       <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card rounded-full shadow-(--shadow-card) px-2 py-2 flex gap-1">
