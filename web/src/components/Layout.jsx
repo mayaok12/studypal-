@@ -5,17 +5,18 @@ const TABS = [
   { to: '/', icon: Home, label: 'Home' },
   { to: '/focus', icon: Timer, label: 'Focus' },
   { to: '/tasks', icon: CheckSquare, label: 'Tasks' },
-  { to: '/ai', icon: Sparkles, label: 'AI' },
+  { to: '/planner', icon: Sparkles, label: 'AI' },
   { to: '/gems', icon: Gem, label: 'Gems' },
   { to: '/friends', icon: Users, label: 'Friends' },
 ]
 
-export default function Layout({ sessions, gems, timer, subject, updateSubject }) {
+export default function Layout({ sessions, gems, timer, subject, updateSubject, todos, addTodo, toggleTodo, deleteTodo }) {
   return (
     <div className="min-h-screen bg-bg text-ink font-body pb-28">
       <div className="max-w-xl mx-auto px-5 pt-8">
-        <Outlet context={{ sessions, gems, timer, subject, updateSubject }} />
+        <Outlet context={{ sessions, gems, timer, subject, updateSubject, todos, addTodo, toggleTodo, deleteTodo }} />
       </div>
+
       <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card rounded-full shadow-(--shadow-card) px-2 py-2 flex gap-1">
         {TABS.map(({ to, icon: Icon, label }) => (
           <NavLink
