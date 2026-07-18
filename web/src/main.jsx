@@ -23,19 +23,7 @@ function Root() {
     setSubject(value)
     subjectRef.current = value
   }
-const [todos, setTodos] = useState([])
 
-function addTodo(text) {
-  setTodos((prev) => [...prev, { id: Date.now(), text, done: false }])
-}
-
-function toggleTodo(id) {
-  setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
-}
-
-function deleteTodo(id) {
-  setTodos((prev) => prev.filter((t) => t.id !== id))
-}
   const logSession = useCallback((minutes, type) => {
     const today = new Date().toISOString().slice(0, 10)
     setSessions((prev) => [...prev, { date: today, minutes, type, subject: subjectRef.current }])
@@ -46,6 +34,20 @@ function deleteTodo(id) {
   const totalMinutes = sessions.reduce((sum, s) => sum + s.minutes, 0)
   const gems = Math.floor(totalMinutes / 10)
 
+  const [todos, setTodos] = useState([])
+
+  function addTodo(text) {
+    setTodos((prev) => [...prev, { id: Date.now(), text, done: false }])
+  }
+
+  function toggleTodo(id) {
+    setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
+  }
+
+  function deleteTodo(id) {
+    setTodos((prev) => prev.filter((t) => t.id !== id))
+  }
+
   if (!loggedIn) {
     return <SignInPage onSignIn={() => setLoggedIn(true)} />
   }
@@ -53,7 +55,17 @@ function deleteTodo(id) {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout sessions={sessions} gems={gems} timer={timer} subject={subject} updateSubject={updateSubject} />}>
+        <Route element={<Layout
+          sessions={sessions}
+          gems={gems}
+          timer={timer}
+          subject={subject}
+          updateSubject={updateSubject}
+          todos={todos}
+          addTodo={addTodo}
+          toggleTodo={toggleTodo}
+          deleteTodo={deleteTodo}
+        />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/focus" element={<Focus />} />
           <Route path="/tasks" element={<Tasks />} />
