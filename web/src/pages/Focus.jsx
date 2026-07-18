@@ -1,17 +1,9 @@
-import { useState } from 'react'
 import { Play, Pause, RotateCcw, Check } from 'lucide-react'
-import { useTimer } from '../hooks/useTimer'
 import { useOutletContext } from 'react-router-dom'
 
 export default function Focus() {
-  const [subject, setSubject] = useState('')
+  const { timer, subject, updateSubject } = useOutletContext()
 
-const { logSession } = useOutletContext()
-
-function handleSessionComplete(minutes, type) {
-  logSession(minutes, type, subject)
-}
-  const timer = useTimer(handleSessionComplete)
   const isGreen = timer.mode === 'pomodoro' || (timer.mode === 'stopwatch' && timer.display !== '00:00')
 
   const ringSize = 194
@@ -92,7 +84,7 @@ function handleSessionComplete(minutes, type) {
 
         <input
           value={subject}
-          onChange={(e) => setSubject(e.target.value)}
+          onChange={(e) => updateSubject(e.target.value)}
           placeholder="What are you studying?"
           className={`w-full max-w-xs mx-auto block px-4 py-3 rounded-full text-sm mb-4 outline-none ${
             isGreen ? 'bg-white/20 text-white placeholder-white/70' : 'border border-line text-ink'
