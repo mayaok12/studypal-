@@ -23,7 +23,19 @@ function Root() {
     setSubject(value)
     subjectRef.current = value
   }
+const [todos, setTodos] = useState([])
 
+function addTodo(text) {
+  setTodos((prev) => [...prev, { id: Date.now(), text, done: false }])
+}
+
+function toggleTodo(id) {
+  setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
+}
+
+function deleteTodo(id) {
+  setTodos((prev) => prev.filter((t) => t.id !== id))
+}
   const logSession = useCallback((minutes, type) => {
     const today = new Date().toISOString().slice(0, 10)
     setSessions((prev) => [...prev, { date: today, minutes, type, subject: subjectRef.current }])
