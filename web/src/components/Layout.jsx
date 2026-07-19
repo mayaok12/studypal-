@@ -8,6 +8,7 @@ const TABS = [
   { to: '/planner', icon: Sparkles, label: 'AI' },
   { to: '/gems', icon: Gem, label: 'Gems' },
   { to: '/friends', icon: Users, label: 'Friends' },
+  { to: '/stats', icon: Sparkles, label: 'Stats' },
 ]
 
 export default function Layout({ sessions, gems, timer, subject, updateSubject, todos, addTodo, toggleTodo, deleteTodo }) {
