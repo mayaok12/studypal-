@@ -12,6 +12,7 @@ import Friends from './pages/Friends'
 import SignInPage from './pages/SignInPage'
 import { useTimer } from './hooks/useTimer'
 import './index.css'
+import { usePersistedState } from './hooks/usePersistedState'
 
 function Root() {
   const [loggedIn, setLoggedIn] = useState(false)
