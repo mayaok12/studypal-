@@ -16,8 +16,8 @@ import { usePersistedState } from './hooks/usePersistedState'
 
 function Root() {
   const [loggedIn, setLoggedIn] = useState(false)
-  const [sessions, setSessions] = useState([])
-  const [subject, setSubject] = useState('')
+  const [sessions, setSessions] = usePersistedState('gemstudy-sessions', [])
+  const [subject, setSubject] = usePersistedState('gemstudy-subject', '')
   const subjectRef = useRef('')
 
   function updateSubject(value) {
