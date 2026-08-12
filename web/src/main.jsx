@@ -35,8 +35,7 @@ function Root() {
   const totalMinutes = sessions.reduce((sum, s) => sum + s.minutes, 0)
   const gems = Math.floor(totalMinutes / 10)
 
-  const [todos, setTodos] = useState([])
-
+  const [todos, setTodos] = usePersistedState('gemstudy-todos', [])
   function addTodo(text) {
     setTodos((prev) => [...prev, { id: Date.now(), text, done: false }])
   }
