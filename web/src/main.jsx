@@ -1,4 +1,3 @@
-import { StrictMode, useState, useRef, useCallback } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
@@ -12,7 +11,9 @@ import Friends from './pages/Friends'
 import SignInPage from './pages/SignInPage'
 import { useTimer } from './hooks/useTimer'
 import './index.css'
+import { supabase } from './lib/supabaseClient'
 import { usePersistedState } from './hooks/usePersistedState'
+import { StrictMode, useState, useRef, useCallback, useEffect } from 'react'
 
 function Root() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -35,18 +36,67 @@ function Root() {
   const totalMinutes = sessions.reduce((sum, s) => sum + s.minutes, 0)
   const gems = Math.floor(totalMinutes / 10)
 
-  const [todos, setTodos] = usePersistedState('gemstudy-todos', [])
-  function addTodo(text) {
-    setTodos((prev) => [...prev, { id: Date.now(), text, done: false }])
+const [todos, setTodos] = useState([])
+
+useEffect(() => {
+  async function loadTodos() {
+    const { data, error } = await supabase
+      .from('todos')
+      .select('*')
+      .order('created_at', { ascending: true })
+
+    if (error) {
+      console.error('Error loading todos:', error)
+    } else {
+      setTodos(data)
+    }
   }
 
-  function toggleTodo(id) {
-    setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
+  loadTodos()
+}, [])
+
+async function addTodo(text) {
+  const { data, error } = await supabase
+    .from('todos')
+    .insert([{ text, done: false }])
+    .select()
+
+  if (error) {
+    console.error('Error adding todo:', error)
+    return
   }
 
-  function deleteTodo(id) {
-    setTodos((prev) => prev.filter((t) => t.id !== id))
+  setTodos((prev) => [...prev, data[0]])
+}
+
+async function toggleTodo(id) {
+  const todo = todos.find((t) => t.id === id)
+  const { error } = await supabase
+    .from('todos')
+    .update({ done: !todo.done })
+    .eq('id', id)
+
+  if (error) {
+    console.error('Error toggling todo:', error)
+    return
   }
+
+  setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
+}
+
+async function deleteTodo(id) {
+  const { error } = await supabase
+    .from('todos')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error('Error deleting todo:', error)
+    return
+  }
+
+  setTodos((prev) => prev.filter((t) => t.id !== id))
+}
 
   if (!loggedIn) {
     return <SignInPage onSignIn={() => setLoggedIn(true)} />
